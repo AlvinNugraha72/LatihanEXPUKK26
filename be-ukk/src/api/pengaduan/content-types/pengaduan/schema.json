@@ -1,0 +1,46 @@
+{
+  "kind": "collectionType",
+  "collectionName": "pengaduans",
+  "info": {
+    "singularName": "pengaduan",
+    "pluralName": "pengaduans",
+    "displayName": "Pengaduan"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "lokasi": {
+      "type": "string"
+    },
+    "ket": {
+      "type": "text"
+    },
+    "status_laporan": {
+      "type": "enumeration",
+      "default": "Menunggu",
+      "enum": [
+        "Menunggu",
+        "Proses",
+        "Selesai",
+        "Invalid"
+      ]
+    },
+    "feedback": {
+      "type": "text"
+    },
+    "kategoris": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::kategori.kategori",
+      "inversedBy": "pengaduans"
+    },
+    "siswa": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::siswa.siswa",
+      "inversedBy": "pengaduans"
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "siswas",
+  "info": {
+    "singularName": "siswa",
+    "pluralName": "siswas",
+    "displayName": "Siswa"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nis": {
+      "type": "biginteger",
+      "unique": true
+    },
+    "nama": {
+      "type": "string"
+    },
+    "password": {
+      "type": "string"
+    },
+    "pengaduans": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::pengaduan.pengaduan",
+      "mappedBy": "siswa"
+    }
+  }
+}
