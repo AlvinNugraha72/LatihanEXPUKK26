@@ -41,6 +41,18 @@
       "relation": "manyToOne",
       "target": "api::siswa.siswa",
       "inversedBy": "pengaduans"
+    },
+    "foto_laporan": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "foto_feedback": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
     }
   }
 }

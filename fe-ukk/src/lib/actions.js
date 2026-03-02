@@ -140,16 +140,49 @@ export async function getKategoriAction() {
 }
 
 /**
- * 5. CREATE PENGADUAN (SISWA)
+ * 5. UPLOAD GAMBAR KE STRAPI MEDIA LIBRARY
+ * Return ID file yang berhasil diupload
+ */
+export async function uploadImageAction(file) {
+    if (!file || file.size === 0) return null;
+    const fd = new FormData();
+    fd.append("files", file);
+    try {
+        const res = await fetch(`${BASE_URL}/upload`, { 
+            method: "POST", 
+            body: fd 
+        });
+        if (!res.ok) {
+            const errBody = await res.json().catch(() => ({}));
+            console.error("Upload Image Failed:", res.status, errBody);
+            return null;
+        }
+        const result = await res.json();
+        return result[0]?.id || null;
+    } catch (e) {
+        console.error("Upload Image Exception:", e);
+        return null;
+    }
+}
+
+/**
+ * 6. CREATE PENGADUAN (SISWA) — dengan dukungan foto_laporan
  */
 export async function createPengaduanAction(prevState, formData) {
     const idSiswa = formData.get("idSiswa");
     const idKategori = formData.get("idKategori");
     const lokasi = formData.get("lokasi");
     const ket = formData.get("keterangan");
+    const fotoFile = formData.get("foto_laporan");
 
     if (!idSiswa || !idKategori || !lokasi || !ket) {
         return { error: "Semua field harus diisi!" };
+    }
+
+    // Upload gambar dulu jika ada
+    let fotoId = null;
+    if (fotoFile && fotoFile.size > 0) {
+        fotoId = await uploadImageAction(fotoFile);
     }
 
     const payload = {
@@ -159,6 +192,7 @@ export async function createPengaduanAction(prevState, formData) {
           status_laporan: "Menunggu",
           siswa: { connect: [Number(idSiswa)] },
           kategoris: { connect: [Number(idKategori)] },
+          ...(fotoId && { foto_laporan: fotoId }),
         }
     };
     
@@ -184,7 +218,7 @@ export async function createPengaduanAction(prevState, formData) {
 }
 
 /**
- * 6. DELETE PENGADUAN SISWA (TERKONDISI)
+ * 7. DELETE PENGADUAN SISWA (TERKONDISI)
  * Hapus hanya jika status masih 'Menunggu'
  */
 export async function deletePengaduanSiswaAction(docId) {
@@ -213,7 +247,7 @@ export async function deletePengaduanAdminAction(docId) {
      try {
         const res = await fetch(`${BASE_URL}/pengaduans/${docId}`, { method: "DELETE" });
         if (res.ok) {
-            revalidatePath("/admin");
+            revalidatePath("/admin", "layout");
             return { success: true };
         }
         return { error: "Gagal menghapus laporan." };
@@ -223,14 +257,23 @@ export async function deletePengaduanAdminAction(docId) {
 }
 
 /**
- * 8. UPDATE FEEDBACK & STATUS (ADMIN)
+ * 9. UPDATE FEEDBACK & STATUS (ADMIN) — dengan dukungan foto_feedback
  */
 export async function updateFeedbackAction(formData) {
     const docId = formData.get("documentId");
+    const fotoFile = formData.get("foto_feedback");
+
+    // Upload foto feedback jika ada
+    let fotoFeedbackId = null;
+    if (fotoFile && fotoFile.size > 0) {
+        fotoFeedbackId = await uploadImageAction(fotoFile);
+    }
+
     const payload = {
         data: {
           status_laporan: formData.get("status_baru"),
           feedback: formData.get("feedback_admin"),
+          ...(fotoFeedbackId && { foto_feedback: fotoFeedbackId }),
         }
     };
     
@@ -242,12 +285,12 @@ export async function updateFeedbackAction(formData) {
         });
         
         if (res.ok) {
-            revalidatePath("/admin");
+            revalidatePath("/admin", "layout");
             revalidatePath("/admin/menunggu");
             revalidatePath("/admin/arsip");
             return { success: true };
         }
-        return { success: false, error: "Gagal update status." };
+        const errResult = await res.json().catch(() => ({})); console.error("Update Feedback Failed:", res.status, errResult); return { success: false, error: errResult?.error?.message || "Gagal update status." };
     } catch (e) {
         return { success: false, error: e.message };
     }
@@ -271,12 +314,12 @@ export async function updateStatusAction(docId, newStatus) {
         });
         
         if (res.ok) {
-            revalidatePath("/admin");
+            revalidatePath("/admin", "layout");
             revalidatePath("/admin/menunggu");
             revalidatePath("/admin/arsip");
             return { success: true };
         }
-        return { success: false, error: "Gagal update status." };
+        const errResult = await res.json().catch(() => ({})); console.error("Update Feedback Failed:", res.status, errResult); return { success: false, error: errResult?.error?.message || "Gagal update status." };
     } catch (e) {
         return { success: false, error: e.message };
     }
@@ -420,3 +463,4 @@ export async function deleteSiswaAction(docId) {
         return { error: e.message };
     }
 }
+

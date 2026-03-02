@@ -4,6 +4,8 @@ import { getLaporanAction, getMeAction, logoutAction, deletePengaduanSiswaAction
 import SiswaFilters from "./SiswaFilters";
 import Pagination from "../admin/Pagination";
 
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL?.replace("/api", "") || "http://localhost:1337";
+
 export default async function SiswaPage({ searchParams }) {
   // 1. Auth & Data (Server Side)
   const user = await getMeAction();
@@ -151,7 +153,7 @@ export default async function SiswaPage({ searchParams }) {
                     scroll={false} 
                 />
                 
-                <div className="bg-white w-full max-w-xl border-4 border-black p-0 z-10 shadow-[20px_20px_0_0_#000]">
+                <div className="bg-white w-full max-w-xl border-4 border-black p-0 z-10 shadow-[20px_20px_0_0_#000] flex flex-col max-h-[90vh]">
                     <div className="bg-black text-white p-6 flex justify-between items-start">
                          <div>
                             <h3 className="font-black text-2xl uppercase italic">Detail Laporan Siswa</h3>
@@ -164,7 +166,7 @@ export default async function SiswaPage({ searchParams }) {
                          >✕</Link>
                     </div>
 
-                    <div className="p-8 space-y-6 text-black">
+                    <div className="p-8 space-y-6 text-black overflow-y-auto flex-1">
                          <div className="grid grid-cols-2 gap-8">
                             <div>
                                 <span className="text-[10px] font-black opacity-40 uppercase tracking-[0.2em]">Lokasi Kejadian</span>
@@ -195,12 +197,36 @@ export default async function SiswaPage({ searchParams }) {
                             </div>
                          </div>
                          
+                         {/* Foto Bukti Laporan */}
+                         {selectedReport.foto_laporan?.url && (
+                             <div>
+                                <div className="divider before:bg-black after:bg-black font-black uppercase text-xs italic tracking-widest py-2 text-gray-600">Foto Bukti Laporan</div>
+                                <div className="border-2 border-black overflow-hidden">
+                                   <img
+                                      src={`${STRAPI_URL}${selectedReport.foto_laporan.url}`}
+                                      alt="Foto bukti laporan"
+                                      className="w-full object-cover max-h-72"
+                                   />
+                                </div>
+                             </div>
+                         )}
+
                          {selectedReport.feedback && (
                              <div>
                                 <div className="divider before:bg-black after:bg-black font-black uppercase text-xs italic tracking-widest py-2 text-blue-600">Respon Petugas</div>
                                 <div className="p-4 bg-blue-50 border-2 border-dashed border-blue-400 font-bold text-sm">
                                     {selectedReport.feedback}
                                 </div>
+                                {/* Foto Feedback Admin */}
+                                {selectedReport.foto_feedback?.url && (
+                                    <div className="mt-3 border-2 border-dashed border-blue-400 overflow-hidden">
+                                       <img
+                                          src={`${STRAPI_URL}${selectedReport.foto_feedback.url}`}
+                                          alt="Foto respons petugas"
+                                          className="w-full object-cover max-h-72"
+                                       />
+                                    </div>
+                                )}
                              </div>
                          )}
                     </div>
