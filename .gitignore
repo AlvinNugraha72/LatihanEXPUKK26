@@ -1,0 +1,22 @@
+# Mengabaikan folder dependency
+node_modules/
+be-ukk/node_modules/
+fe-ukk/node_modules/
+fe-ukk/dist/
+fe-ukk/.next/
+
+# Mengabaikan file rahasia/konfigurasi lokal
+.env*
+be-ukk/.env*
+fe-ukk/.env*
+
+# Mengabaikan database SQLite
+*.db
+*.sqlite
+*.sqlite3
+be-ukk/.tmp/
+
+# Mengabaikan file sistem
+.DS_Store
+Thumbs.db
+.vscode/
