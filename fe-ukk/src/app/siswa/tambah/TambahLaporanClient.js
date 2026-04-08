@@ -62,17 +62,35 @@ export default function TambahLaporanPageClient({ kategoriList, userId }) {
                   </div>
               </div>
 
-              {/* Row 2: Keterangan (Half Width) */}
-              <div className="form-control w-full md:w-1/2">
-                  <label className="label pb-1">
-                      <span className="label-text font-black uppercase text-lg">Keterangan Detail</span>
-                  </label>
-                  <textarea 
-                    name="keterangan"
-                    className="textarea textarea-bordered border-2 border-black rounded-none focus:outline-none font-bold h-40 bg-gray-50 text-lg"
-                    placeholder="Jelaskan detail laporanmu di sini..."
-                    required
-                  ></textarea>
+              {/* Row 2: Keterangan & Foto */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="form-control w-full">
+                      <label className="label pb-1">
+                          <span className="label-text font-black uppercase text-lg">Keterangan Detail</span>
+                      </label>
+                      <textarea 
+                        name="keterangan"
+                        className="textarea textarea-bordered border-2 border-black rounded-none focus:outline-none font-bold h-40 bg-gray-50 text-lg"
+                        placeholder="Jelaskan detail laporanmu di sini..."
+                        required
+                      ></textarea>
+                  </div>
+                  
+                  <div className="form-control w-full">
+                      <label className="label pb-1">
+                          <span className="label-text font-black uppercase text-lg">Foto Kejadian (Dalam Pemeliharaan)</span>
+                      </label>
+                      <input 
+                        type="file"
+                        name="foto"
+                        accept="image/*"
+                        className="file-input file-input-bordered border-2 border-black rounded-none w-full bg-gray-200 h-14 cursor-not-allowed opacity-50"
+                        disabled
+                      />
+                      <span className="text-xs uppercase font-bold mt-2 text-red-500 font-black">
+                          * Fitur lampiran foto sedang dalam pemeliharaan teknis.
+                      </span>
+                  </div>
               </div>
 
               <div className="flex gap-4 pt-4">

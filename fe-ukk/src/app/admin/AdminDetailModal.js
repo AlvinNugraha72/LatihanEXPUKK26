@@ -73,6 +73,20 @@ export default function AdminDetailModal({ report, basePath, searchParams }) {
                 </div>
                 </div>
 
+                {/* Foto Kejadian */}
+                {report.foto && (
+                  <div>
+                    <span className="text-[10px] font-black opacity-40 uppercase tracking-[0.2em]">Foto Kejadian</span>
+                    <div className="mt-1 border-2 border-black overflow-hidden bg-gray-100">
+                      <img 
+                        src={report.foto.url.startsWith('http') ? report.foto.url : `http://127.0.0.1:1337${report.foto.url}`} 
+                        alt="Foto Kejadian" 
+                        className="w-full h-auto object-contain max-h-[300px]"
+                      />
+                    </div>
+                  </div>
+                )}
+
                 <div>
                 <span className="text-[10px] font-black opacity-40 uppercase tracking-widest">Status Saat Ini</span>
                 <div className={`p-2 border-2 border-black font-black text-center uppercase mt-1 text-xs ${

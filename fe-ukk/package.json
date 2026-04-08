@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "clean": "rd /s /q .next"
   },
   "dependencies": {
     "next": "^16.1.6",
@@ -15,7 +16,6 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
-    "daisyui": "^5.5.18",
     "eslint": "^9",
     "eslint-config-next": "^16.1.6",
     "tailwindcss": "^4"

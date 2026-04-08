@@ -4,8 +4,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 
-// Mengambil URL dari environment variable (.env.local)
-const BASE_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
+// Mengambil URL dari environment variable (.env.local) atau fallback ke localhost
+const BASE_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "http://127.0.0.1:1337/api";
 
 /**
  * 1. LOGIKA LOGIN (MULTI-ROLE)
@@ -14,7 +14,6 @@ const BASE_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
 export async function loginAction(prevState, formData) {
   const identifier = formData.get("identifier")?.trim();
   const password = formData.get("password");
-  const BASE_URL = process.env.STRAPI_URL || "http://localhost:1337/api";
 
   let userData = null;
   let targetPath = "";
@@ -147,38 +146,40 @@ export async function createPengaduanAction(prevState, formData) {
     const idKategori = formData.get("idKategori");
     const lokasi = formData.get("lokasi");
     const ket = formData.get("keterangan");
+    const foto = formData.get("foto");
 
     if (!idSiswa || !idKategori || !lokasi || !ket) {
-        return { error: "Semua field harus diisi!" };
+        return { error: "Semua field teks harus diisi!" };
     }
 
     const payload = {
-        data: {
-          lokasi: lokasi,
-          ket: ket,
-          status_laporan: "Menunggu",
-          siswa: { connect: [Number(idSiswa)] },
-          kategoris: { connect: [Number(idKategori)] },
-        }
+        lokasi: lokasi,
+        ket: ket,
+        status_laporan: "Menunggu",
+        siswa: { connect: [Number(idSiswa)] },
+        kategoris: { connect: [Number(idKategori)] },
     };
-    
+
     try {
+        console.log("Mengirim laporan (JSON Only)...");
+        
         const res = await fetch(`${BASE_URL}/pengaduans`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
+            body: JSON.stringify({ data: payload })
         });
         
         const result = await res.json();
 
         if (!res.ok) {
+            console.error("Gagal Simpan Laporan:", JSON.stringify(result, null, 2));
             return { error: result.error?.message || "Gagal membuat laporan." };
         }
         
         revalidatePath("/siswa");
         return { success: true };
     } catch (e) {
-        console.error("Create Error:", e);
+        console.error("Connection Error:", e);
         return { error: "Terjadi kesalahan koneksi server." };
     }
 }

@@ -68,61 +68,61 @@ export default function KelolaSiswa() {
     }
 
     return (
-        <div className="flex bg-slate-50 min-h-screen">
-            {/* <Sidebar /> */}
-            <div className="flex-1 p-8">
-                <div className="bg-white rounded-2xl shadow-sm p-6 border border-slate-200">
-                    <div className="flex justify-between items-center mb-6">
+        <div className="bg-gray-100 min-h-screen font-sans flex justify-center p-4 md:p-12">
+            <div className="w-full max-w-4xl">
+                <div className="bg-white border-2 border-black p-8 shadow-[12px_12px_0_0_#000]">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10 border-b-2 border-black pb-6">
                         <div>
-                            <h1 className="text-2xl font-bold text-slate-800">Kelola Siswa</h1>
-                            <p className="text-slate-500">Manajemen data siswa</p>
+                            <h1 className="text-4xl font-black uppercase tracking-tight">Kelola Siswa</h1>
+                            <p className="opacity-70 mt-1 font-bold italic uppercase text-xs">Administrasi Data Master Siswa</p>
                         </div>
                         <button 
-                            className="btn btn-primary rounded-xl"
+                            className="btn btn-neutral rounded-none border-2 border-black font-black uppercase hover:bg-black hover:text-white"
                             onClick={() => openModal("add")}
                         >
-                            + Tambah Siswa
+                            + Tambah Siswa Baru
                         </button>
                     </div>
 
                     {msg.content && (
-                        <div className={`alert ${msg.type === "success" ? "alert-success" : "alert-error"} mb-4 rounded-xl`}>
+                        <div className={`alert rounded-none border-2 border-black font-black uppercase text-xs mb-8 shadow-[4px_4px_0_0_#000] 
+                            ${msg.type === "success" ? "bg-green-300" : "bg-red-300"}`}>
                             <span>{msg.content}</span>
                         </div>
                     )}
 
-                    <div className="overflow-x-auto">
-                        <table className="table table-zebra w-full">
+                    <div className="overflow-x-auto border-2 border-black">
+                        <table className="table w-full">
                             <thead>
-                                <tr className="bg-slate-100">
-                                    <th>No</th>
+                                <tr className="bg-black text-white uppercase font-black text-sm">
+                                    <th className="py-4 pl-6">No</th>
                                     <th>NIS</th>
                                     <th>Nama Siswa</th>
-                                    <th className="text-center">Aksi</th>
+                                    <th className="text-center pr-6">Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody className="font-bold text-black border-t-2 border-black">
                                 {loading ? (
                                     <tr>
-                                        <td colSpan="4" className="text-center py-10">
-                                            <span className="loading loading-spinner loading-md"></span>
+                                        <td colSpan="4" className="text-center py-16">
+                                            <span className="loading loading-spinner loading-lg"></span>
                                         </td>
                                     </tr>
                                 ) : siswas.length > 0 ? (
                                     siswas.map((s, idx) => (
-                                        <tr key={s.id}>
-                                            <td>{idx + 1}</td>
-                                            <td className="font-mono font-semibold">{s.nis}</td>
-                                            <td>{s.nama}</td>
-                                            <td className="flex justify-center gap-2">
+                                        <tr key={s.id} className="border-b-2 border-black last:border-none hover:bg-gray-50">
+                                            <td className="pl-6 py-4">{idx + 1}</td>
+                                            <td className="font-black tracking-widest">{s.nis}</td>
+                                            <td className="uppercase">{s.nama}</td>
+                                            <td className="text-center pr-6 flex justify-center gap-3">
                                                 <button 
-                                                    className="btn btn-sm btn-info text-white rounded-lg"
+                                                    className="btn btn-xs btn-info text-white rounded-none border-2 border-black font-black uppercase hover:bg-blue-600"
                                                     onClick={() => openModal("edit", s)}
                                                 >
                                                     Edit
                                                 </button>
                                                 <button 
-                                                    className="btn btn-sm btn-error text-white rounded-lg"
+                                                    className="btn btn-xs btn-error text-white rounded-none border-2 border-black font-black uppercase hover:bg-red-600"
                                                     onClick={() => handleDelete(s.documentId)}
                                                 >
                                                     Hapus
@@ -132,7 +132,7 @@ export default function KelolaSiswa() {
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan="4" className="text-center py-10 text-slate-400">Belum ada data siswa.</td>
+                                        <td colSpan="4" className="text-center py-20 opacity-50 uppercase font-black text-2xl">Belum ada data siswa.</td>
                                     </tr>
                                 )}
                             </tbody>
@@ -141,50 +141,55 @@ export default function KelolaSiswa() {
                 </div>
             </div>
 
-            {/* Modal Add/Edit */}
-            <dialog id="modal_siswa" className="modal">
-                <div className="modal-box rounded-2xl">
-                    <h3 className="font-bold text-lg mb-4">
-                        {modalMode === "add" ? "Tambah Siswa Baru" : "Edit Data Siswa"}
+            {/* Modal Add/Edit (Neobrutalism Style) */}
+            <dialog id="modal_siswa" className="modal backdrop-blur-sm">
+                <div className="modal-box rounded-none border-4 border-black p-10 bg-white shadow-[16px_16px_0_0_#000] max-w-lg">
+                    <h3 className="font-black text-3xl uppercase mb-8 bg-yellow-300 inline-block px-2 border-2 border-black">
+                        {modalMode === "add" ? "Tambah Siswa" : "Edit Siswa"}
                     </h3>
-                    <form onSubmit={handleSubmit} className="space-y-4">
+                    
+                    <form onSubmit={handleSubmit} className="space-y-6">
                         <div className="form-control">
-                            <label className="label"><span className="label-text font-semibold">NIS</span></label>
+                            <label className="label pb-1"><span className="label-text font-black uppercase">Nomor Induk Siswa (NIS)</span></label>
                             <input 
                                 name="nis" 
                                 type="text" 
-                                className="input input-bordered w-full rounded-xl" 
+                                placeholder="Contoh: 12345"
+                                className="input input-bordered w-full rounded-none border-2 border-black focus:outline-none font-bold bg-gray-50 h-14" 
                                 defaultValue={selectedSiswa?.nis || ""} 
                                 required 
                             />
                         </div>
                         <div className="form-control">
-                            <label className="label"><span className="label-text font-semibold">Nama Lengkap</span></label>
+                            <label className="label pb-1"><span className="label-text font-black uppercase">Nama Lengkap Siswa</span></label>
                             <input 
                                 name="nama" 
                                 type="text" 
-                                className="input input-bordered w-full rounded-xl" 
+                                placeholder="Contoh: Alvin Nugraha"
+                                className="input input-bordered w-full rounded-none border-2 border-black focus:outline-none font-bold bg-gray-50 h-14" 
                                 defaultValue={selectedSiswa?.nama || ""} 
                                 required 
                             />
                         </div>
                         <div className="form-control">
-                            <label className="label">
-                                <span className="label-text font-semibold">Password</span>
-                                {modalMode === "edit" && <span className="label-text-alt text-slate-400">Biarkan kosong jika tidak ingin mengubah</span>}
+                            <label className="label pb-1">
+                                <span className="label-text font-black uppercase">Kata Sandi (Password)</span>
                             </label>
                             <input 
                                 name="password" 
                                 type="password" 
-                                className="input input-bordered w-full rounded-xl" 
-                                placeholder={modalMode === "add" ? "Password default: 123" : "****"}
+                                className="input input-bordered w-full rounded-none border-2 border-black focus:outline-none font-bold bg-gray-50 h-14" 
+                                placeholder={modalMode === "add" ? "Default: 123" : "Kosongkan jika tetap"}
                                 required={modalMode === "add"}
                             />
+                            {modalMode === "edit" && <span className="text-[10px] font-bold mt-2 opacity-60 uppercase italic">* Biarkan kosong jika tidak ingin mengubah kata sandi</span>}
                         </div>
                         
-                        <div className="modal-action">
-                            <button type="button" className="btn btn-ghost rounded-xl" onClick={() => document.getElementById("modal_siswa").close()}>Batal</button>
-                            <button type="submit" className="btn btn-primary rounded-xl px-8">Simpan</button>
+                        <div className="flex gap-4 pt-6 border-t-2 border-black mt-4">
+                            <button type="button" className="btn btn-ghost font-black flex-1 rounded-none border-2 border-transparent hover:border-black uppercase" onClick={() => document.getElementById("modal_siswa").close()}>Batal</button>
+                            <button type="submit" className="btn btn-neutral font-black flex-1 rounded-none border-2 border-black uppercase bg-black text-white hover:bg-neutral-800">
+                                {modalMode === "add" ? "💾 Simpan Baru" : "🔄 Perbarui Data"}
+                            </button>
                         </div>
                     </form>
                 </div>

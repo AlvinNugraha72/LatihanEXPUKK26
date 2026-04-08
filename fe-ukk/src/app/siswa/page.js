@@ -36,17 +36,24 @@ export default async function SiswaPage({ searchParams }) {
   return (
     <div className="min-h-screen bg-base-200 text-base-content font-sans">
         {/* Navbar */}
-        <div className="navbar bg-base-100 shadow-md px-6">
-            <div className="flex-1">
-                <Link href="/siswa" className="btn btn-ghost text-xl font-black">PENGADUAN SISWA</Link>
-            </div>
-            <div className="flex-none gap-4">
-                <span className="font-bold hidden md:block">{user.nama}</span>
+        <div className="bg-white border-b-4 border-black px-6 py-4 flex flex-row justify-between items-center sticky top-0 z-40">
+            <Link href="/siswa" className="text-2xl font-black uppercase tracking-tighter italic hover:opacity-70 transition-opacity">
+                📢 Pengaduan Siswa
+            </Link>
+            
+            <div className="flex items-center gap-6">
+                <div className="hidden sm:flex flex-col items-end">
+                    <span className="text-[10px] font-black uppercase opacity-40 leading-none mb-1 text-right">Tersambung Sebagai</span>
+                    <span className="font-black uppercase text-sm leading-none">{user.nama}</span>
+                </div>
+                
                 <form action={async () => {
                     "use server";
                     await logoutAction();
                 }}>
-                    <button type="submit" className="btn btn-neutral btn-sm">Logout</button>
+                    <button type="submit" className="btn btn-sm btn-error rounded-none border-2 border-black font-black uppercase px-6 hover:bg-black hover:text-white transition-all shadow-[4px_4px_0_0_#000] hover:shadow-none translate-y-[-2px] hover:translate-y-0 text-white">
+                        Log Out
+                    </button>
                 </form>
             </div>
         </div>
@@ -182,6 +189,20 @@ export default async function SiswaPage({ searchParams }) {
                                 {selectedReport.ket}
                             </div>
                          </div>
+
+                         {/* Foto Kejadian */}
+                         {selectedReport.foto && (
+                            <div>
+                              <span className="text-[10px] font-black opacity-40 uppercase tracking-[0.2em]">Foto Kejadian</span>
+                              <div className="mt-2 border-2 border-black overflow-hidden bg-gray-100 flex justify-center">
+                                <img 
+                                  src={selectedReport.foto.url.startsWith('http') ? selectedReport.foto.url : `http://127.0.0.1:1337${selectedReport.foto.url}`} 
+                                  alt="Foto Kejadian" 
+                                  className="w-full h-auto object-contain max-h-[250px]"
+                                />
+                              </div>
+                            </div>
+                         )}
 
                          <div>
                             <span className="text-[10px] font-black opacity-40 uppercase tracking-widest">Status Progres Laporan</span>

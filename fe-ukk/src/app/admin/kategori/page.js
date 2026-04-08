@@ -49,10 +49,10 @@ export default async function KategoriPage({ searchParams }) {
                         <tr key={item.documentId} className="hover:bg-gray-50 border-b-2 border-gray-100 font-bold">
                             <td className="pl-6">{index + 1}</td>
                             <td className="text-lg">{item.ket_kategori}</td>
-                            <td className="pr-6 text-right space-x-2 flex justify-end">
+                            <td className="pr-6 text-right flex justify-end gap-2">
                                 <Link 
                                     href={`/admin/kategori?mode=edit&id=${item.documentId}`}
-                                    className="btn btn-sm btn-outline rounded-none border-2 hover:bg-black hover:text-white"
+                                    className="btn btn-xs btn-outline rounded-none border-2 border-black font-black uppercase hover:bg-black hover:text-white"
                                     scroll={false}
                                 >
                                     Edit
@@ -61,7 +61,7 @@ export default async function KategoriPage({ searchParams }) {
                                     "use server";
                                     await deleteKategoriAction(item.documentId);
                                 }}>
-                                    <button className="btn btn-sm btn-error text-white rounded-none border-2 border-black hover:bg-red-600 hover:border-black">
+                                    <button className="btn btn-xs btn-error text-white rounded-none border-2 border-black font-black uppercase hover:bg-red-600">
                                         Hapus
                                     </button>
                                 </form>
