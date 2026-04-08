@@ -30,6 +30,14 @@
     "feedback": {
       "type": "text"
     },
+    "foto": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
     "kategoris": {
       "type": "relation",
       "relation": "manyToOne",

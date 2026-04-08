@@ -541,6 +541,7 @@ export interface ApiPengaduanPengaduan extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     feedback: Schema.Attribute.Text;
+    foto: Schema.Attribute.Media<'images'>;
     kategoris: Schema.Attribute.Relation<'manyToOne', 'api::kategori.kategori'>;
     ket: Schema.Attribute.Text;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
